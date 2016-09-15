@@ -3,8 +3,10 @@ package ravello.com.lifty;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class LookupActivity extends AppCompatActivity {
 
@@ -26,5 +28,20 @@ public class LookupActivity extends AppCompatActivity {
         textView.setText(carNumberPlate);
 
 
+    }
+
+    public void emailOnClick(View view) {
+        Intent oldIntent = getIntent();
+        String email = oldIntent.getStringExtra(MainActivity.EXTRA_MESSAGE_CAR_DRIVER_EMAIL);
+        Intent i = new Intent(Intent.ACTION_SEND);
+        i.setType("message/rfc822");
+        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{email});
+        i.putExtra(Intent.EXTRA_SUBJECT, "subject of email");
+        i.putExtra(Intent.EXTRA_TEXT   , "body of email");
+        try {
+            startActivity(Intent.createChooser(i, "Send mail..."));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(LookupActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+        }
     }
 }

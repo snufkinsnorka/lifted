@@ -31,6 +31,7 @@
         android:layout_height="wrap_content"
         android:text="@string/email_button_text"
         android:id="@+id/email_button"
+        android:onClick="emailOnClick"
         android:layout_above="@+id/sms_button"
         android:layout_centerHorizontal="true" />
 
