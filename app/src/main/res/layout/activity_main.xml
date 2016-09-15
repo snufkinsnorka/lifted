@@ -22,14 +22,15 @@
         android:id="@+id/button_lookup"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="52dp" />
+        android:layout_marginBottom="52dp"
+        android:onClick="lookup"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="number"
         android:ems="10"
-        android:id="@+id/editText"
+        android:id="@+id/carPlateNumber"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="153dp"
         android:hint="@string/edit_message"/>
