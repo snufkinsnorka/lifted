@@ -10,4 +10,53 @@
     android:id="@+id/activity_lookup"
     tools:context="ravello.com.lifty.LookupActivity">
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/ignore_button_text"
+        android:id="@+id/ignore_button"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sms_button_text"
+        android:id="@+id/sms_button"
+        android:layout_above="@+id/ignore_button"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/email_button_text"
+        android:id="@+id/email_button"
+        android:layout_above="@+id/sms_button"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/call_button_text"
+        android:id="@+id/call_button"
+        android:layout_above="@+id/email_button"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/driverName"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="53dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/carPlateNumberResolved"
+        android:layout_below="@+id/driverName"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="53dp" />
 </RelativeLayout>

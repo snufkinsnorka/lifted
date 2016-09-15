@@ -10,6 +10,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     public final static String EXTRA_MESSAGE_CAR_PLATE_NUMBER = "ravello.com.lifty.CAR_PLATE_NUMBER";
+    public final static String EXTRA_MESSAGE_CAR_DRIVER_NAME = "ravello.com.lifty.CAR_DRIVER_NAME";
+    public final static String EXTRA_MESSAGE_CAR_DRIVER_EMAIL = "ravello.com.lifty.CAR_DRIVER_EMAIL";
+    public final static String EXTRA_MESSAGE_CAR_DRIVER_PHONE = "ravello.com.lifty.CAR_DRIVER_PHONE";
 
 
     @Override
@@ -30,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
         //TODO: go to google drive to get driver info
 
         intent.putExtra(EXTRA_MESSAGE_CAR_PLATE_NUMBER, num);
+        intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_NAME, "bat hen");
+        intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_EMAIL, "anna.itin@gmail.com");
+        intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_PHONE, "0545726619");
 
         startActivity(intent);
     }

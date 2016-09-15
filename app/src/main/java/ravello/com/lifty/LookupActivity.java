@@ -14,13 +14,17 @@ public class LookupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lookup);
 
         Intent intent = getIntent();
+
+        String carDriverName = intent.getStringExtra(MainActivity.EXTRA_MESSAGE_CAR_DRIVER_NAME);
+        TextView driverNameTV = (TextView) findViewById(R.id.driverName);
+        driverNameTV.setTextSize(40);
+        driverNameTV.setText(carDriverName);
+
         String carNumberPlate = intent.getStringExtra(MainActivity.EXTRA_MESSAGE_CAR_PLATE_NUMBER);
-        TextView textView = new TextView(this);
+        TextView textView = (TextView) findViewById(R.id.carPlateNumberResolved);
         textView.setTextSize(40);
         textView.setText(carNumberPlate);
 
-        ViewGroup layout = (ViewGroup) findViewById(R.id.activity_lookup);
-        layout.addView(textView);
 
     }
 }

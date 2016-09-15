@@ -2,4 +2,8 @@
     <string name="app_name">lifty</string>
     <string name="button_lookup_text">Lookup</string>
     <string name="edit_message">Enter car plate number</string>
+    <string name="call_button_text">Call</string>
+    <string name="sms_button_text">SMS</string>
+    <string name="ignore_button_text">IGNORE</string>
+    <string name="email_button_text">EMAIL</string>
 </resources>
