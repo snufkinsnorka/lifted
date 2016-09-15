@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">lifty</string>
+    <string name="button_lookup_text">Lookup</string>
+    <string name="edit_message">Enter car plate number</string>
+</resources>
