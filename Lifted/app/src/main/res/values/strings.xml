@@ -3,4 +3,5 @@
     <string name="action_settings">Settings</string>
     <string name="lookup_button_text">Lookup</string>
     <string name="edit_message">Enter plate number</string>
+    <string name="title_activity_main2">Main2Activity</string>
 </resources>
