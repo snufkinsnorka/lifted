@@ -93,43 +93,12 @@ public class MainActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        LinearLayout activityLayout = new LinearLayout(this);
-//        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-//                LinearLayout.LayoutParams.MATCH_PARENT,
-//                LinearLayout.LayoutParams.MATCH_PARENT);
-//        activityLayout.setLayoutParams(lp);
-//        activityLayout.setOrientation(LinearLayout.VERTICAL);
-//        activityLayout.setPadding(16, 16, 16, 16);
-//
-//        ViewGroup.LayoutParams tlp = new ViewGroup.LayoutParams(
-//                ViewGroup.LayoutParams.WRAP_CONTENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT);
-//
-//        mCallApiButton = new Button(this);
-//        mCallApiButton.setText(BUTTON_TEXT);
-//        mCallApiButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mCallApiButton.setEnabled(false);
-//                mOutputText.setText("");
-//                getResultsFromApi();
-//                mCallApiButton.setEnabled(true);
-//            }
-//        });
-//        activityLayout.addView(mCallApiButton);
         mOutputText = (TextView) findViewById(R.id.outputText);
-//            mOutputText = new TextView(this);
-//        mOutputText.setLayoutParams(tlp);
         mOutputText.setPadding(16, 16, 16, 16);
         mOutputText.setVerticalScrollBarEnabled(true);
         mOutputText.setMovementMethod(new ScrollingMovementMethod());
-        mOutputText.setText(
-                "Click the \'" + BUTTON_TEXT +"\' button to test the API.");
-//        activityLayout.addView(mOutputText);
         mProgress = new ProgressDialog(this);
         mProgress.setMessage("Calling Google Sheets API ...");
-//        setContentView(activityLayout);
         // Initialize credentials and service object.
         List<String> scopes = Arrays.asList(SheetsScopes.SPREADSHEETS_READONLY);
         GoogleAccountCredential cred = GoogleAccountCredential.usingOAuth2(getApplicationContext(),
@@ -140,7 +109,7 @@ public class MainActivity extends Activity
 
     }
 
-    private void getResultsFromApi() {
+    private void sampleFromGoogle() {
         if (! isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
         } else if (mCredential.getSelectedAccountName() == null) {
@@ -161,7 +130,7 @@ public class MainActivity extends Activity
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
                 mCredential.setSelectedAccountName(accountName);
-                getResultsFromApi();
+                sampleFromGoogle();
             } else {
                 // Start a dialog from which the user can choose an account
                 startActivityForResult(
@@ -189,7 +158,7 @@ public class MainActivity extends Activity
                             "This app requires Google Play Services. Please install " +
                                     "Google Play Services on your device and relaunch this app.");
                 } else {
-                    getResultsFromApi();
+                    sampleFromGoogle();
                 }
                 break;
             case REQUEST_ACCOUNT_PICKER:
@@ -204,13 +173,13 @@ public class MainActivity extends Activity
                         editor.putString(PREF_ACCOUNT_NAME, accountName);
                         editor.apply();
                         mCredential.setSelectedAccountName(accountName);
-                        getResultsFromApi();
+                        sampleFromGoogle();
                     }
                 }
                 break;
             case REQUEST_AUTHORIZATION:
                 if (resultCode == RESULT_OK) {
-                    getResultsFromApi();
+                    sampleFromGoogle();
                 }
                 break;
         }
@@ -282,7 +251,7 @@ public class MainActivity extends Activity
      * An asynchronous task that handles the Google Sheets API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
      */
-    private class MakeRequestTask extends AsyncTask<Void, Void, Map<String,List<String>>> {
+    private class MakeRequestTask extends AsyncTask<Void, Void, Map<String,UserData>> {
         private com.google.api.services.sheets.v4.Sheets mService = null;
         private Exception mLastError = null;
 
@@ -300,7 +269,7 @@ public class MainActivity extends Activity
          * @param params no parameters needed for this task.
          */
         @Override
-        protected Map<String,List<String>> doInBackground(Void... params) {
+        protected Map<String,UserData> doInBackground(Void... params) {
             try {
                 return getDataFromApi();
             } catch (Exception e) {
@@ -316,11 +285,11 @@ public class MainActivity extends Activity
          * @return List of names and majors
          * @throws IOException
          */
-        private Map<String, List<String>> getDataFromApi() throws IOException {
+        private Map<String, UserData> getDataFromApi() throws IOException {
             String spreadsheetId ="1zmTCxJL8BiiuwNgmqzlRFoT3o9eGS2dDUaEWA4TtaTQ";
                     //"1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
             String range = "manuim!A2:H";
-            Map<String,List<String>> results = new HashMap<>();
+            Map<String,UserData> results = new HashMap<>();
             ValueRange response = this.mService.spreadsheets().values()
                     .get(spreadsheetId, range)
                     .execute();
@@ -333,7 +302,8 @@ public class MainActivity extends Activity
                     if(row.size() < 5){
                         continue;
                     }
-                    results.put(row.get(3) + "", Lists.newArrayList(row.get(0) + "", row.get(1) + "" , row.get(2) + "", row.get(4) + ""));
+                    UserData user = new UserData(row.get(1) + "", row.get(0) + "", row.get(2) + "", row.get(4) + "");
+                    results.put(row.get(3) + "", user);
                 }
             }
             return results;
@@ -348,9 +318,9 @@ public class MainActivity extends Activity
         }
 
         @Override
-        protected void onPostExecute(Map<String,List<String>> output) {
+        protected void onPostExecute(Map<String,UserData> output) {
             mProgress.hide();
-            List<String> carHolderData;
+            UserData carHolderData;
             if (output == null || output.size() == 0) {
                 mOutputText.setText("No results returned.");
                 return;
@@ -362,16 +332,15 @@ public class MainActivity extends Activity
                     return;
                 }
                 carHolderData = output.get(mCarPlateNumber);
-                carHolderData.add(0, "Data retrieved using the Google Sheets API:" + mCarPlateNumber);
-                mOutputText.setText(TextUtils.join("\n", carHolderData));
+                mOutputText.setText(carHolderData.toString());
             }
 
 
             Intent intent = new Intent(MainActivity.this, LookupActivity.class);
             intent.putExtra(EXTRA_MESSAGE_CAR_PLATE_NUMBER, mCarPlateNumber);
-            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_NAME, carHolderData.get(1) + " " + carHolderData.get(2));
-            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_EMAIL, carHolderData.get(3));
-            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_PHONE, carHolderData.get(4));
+            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_NAME, carHolderData.getFirstName() + " " + carHolderData.getLastName());
+            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_EMAIL, carHolderData.getEmail());
+            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_PHONE, carHolderData.getPhone());
 
             startActivity(intent);
         }
@@ -399,38 +368,10 @@ public class MainActivity extends Activity
     }
 
     public void lookup(View view){
-
-
-
-
         //TODO: run ocr to get number
         EditText carPlateNumber = (EditText) findViewById(R.id.carPlateNumber);
         mCarPlateNumber = carPlateNumber.getText().toString();
-
-
-
-
-        //TODO: go to google drive to get driver info
-        //readData("4060270");
         sampleFromGoogle();
-
-
     }
 
-
-    public class UserData{
-        private String firstName;
-        private String lastName;
-        private String email;
-
-        public UserData(String firstName, String lastNAme, String email){
-            this.firstName = firstName;
-            this.lastName = lastNAme;
-            this.email = email;
-        }
-    }
-
-    private void sampleFromGoogle(){
-        getResultsFromApi();
-    }
 }
