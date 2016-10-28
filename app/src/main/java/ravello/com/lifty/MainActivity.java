@@ -326,15 +326,14 @@ public class MainActivity extends Activity
                     .execute();
             List<List<Object>> values = response.getValues();
             if (values != null) {
-//                results.put("email, car");
                 for (List row : values) {
                     if(row.size() == 0){
                         continue;
                     }
-                    if(row.size() < 8){
+                    if(row.size() < 5){
                         continue;
                     }
-                    results.put(row.get(3) + "", Lists.newArrayList(row.get(0) + "", row.get(1) + "" , row.get(2) + "", row.get(7) + ""));
+                    results.put(row.get(3) + "", Lists.newArrayList(row.get(0) + "", row.get(1) + "" , row.get(2) + "", row.get(4) + ""));
                 }
             }
             return results;
@@ -356,7 +355,6 @@ public class MainActivity extends Activity
                 mOutputText.setText("No results returned.");
                 return;
             } else {
-//                output.add(0, "Data retrieved using the Google Sheets API:");
                 if(!output.containsKey(mCarPlateNumber)){
                     mOutputText.setText("Didnt find the car number in the list! It is a stranger! " +
                             "You can lift him! It will be his problem to look for you later! " +
