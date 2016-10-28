@@ -1,8 +1,10 @@
 package ravello.com.lifty;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -26,8 +28,6 @@ public class LookupActivity extends AppCompatActivity {
         TextView textView = (TextView) findViewById(R.id.carPlateNumberResolved);
         textView.setTextSize(40);
         textView.setText(carNumberPlate);
-
-
     }
 
     public void emailOnClick(View view) {
@@ -36,7 +36,7 @@ public class LookupActivity extends AppCompatActivity {
         Intent i = new Intent(Intent.ACTION_SEND);
         i.setType("message/rfc822");
         i.putExtra(Intent.EXTRA_EMAIL  , new String[]{email});
-        i.putExtra(Intent.EXTRA_SUBJECT, "Your car was lifted me");
+        i.putExtra(Intent.EXTRA_SUBJECT, "Your car was lifted by me");
         i.putExtra(Intent.EXTRA_TEXT   , "");
         try {
             startActivity(Intent.createChooser(i, "Send mail..."));
@@ -47,31 +47,15 @@ public class LookupActivity extends AppCompatActivity {
 
     public void callOnClick(View view) {
         Intent oldIntent = getIntent();
-        String email = oldIntent.getStringExtra(MainActivity.EXTRA_MESSAGE_CAR_DRIVER_EMAIL);
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("message/rfc822");
-        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{email});
-        i.putExtra(Intent.EXTRA_SUBJECT, "Your car was lifted me");
-        i.putExtra(Intent.EXTRA_TEXT   , "");
-        try {
-            startActivity(Intent.createChooser(i, "Send mail..."));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(LookupActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-        }
+        String phone = oldIntent.getStringExtra(MainActivity.EXTRA_MESSAGE_CAR_DRIVER_PHONE);
+        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+        startActivity(intent);
     }
 
     public void smsOnClick(View view) {
+        SmsManager smsManager = SmsManager.getDefault();
         Intent oldIntent = getIntent();
-        String email = oldIntent.getStringExtra(MainActivity.EXTRA_MESSAGE_CAR_DRIVER_EMAIL);
-        Intent i = new Intent(Intent.ACTION_SEND);
-        i.setType("message/rfc822");
-        i.putExtra(Intent.EXTRA_EMAIL  , new String[]{email});
-        i.putExtra(Intent.EXTRA_SUBJECT, "Your car was lifted me");
-        i.putExtra(Intent.EXTRA_TEXT   , "");
-        try {
-            startActivity(Intent.createChooser(i, "Send mail..."));
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(LookupActivity.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-        }
+        String phoneNo = oldIntent.getStringExtra(MainActivity.EXTRA_MESSAGE_CAR_DRIVER_PHONE);
+        smsManager.sendTextMessage(phoneNo, null, "You car was lifted by me", null, null);
     }
 }
