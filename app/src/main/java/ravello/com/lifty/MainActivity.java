@@ -68,6 +68,7 @@ public class MainActivity extends Activity
     private TextView mOutputText;
     private Button mCallApiButton;
     ProgressDialog mProgress;
+    private String mCarPlateNumber;
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
@@ -313,17 +314,21 @@ public class MainActivity extends Activity
          * @throws IOException
          */
         private List<String> getDataFromApi() throws IOException {
-            String spreadsheetId = "1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
-            String range = "Class Data!A2:E";
+            String spreadsheetId ="1zmTCxJL8BiiuwNgmqzlRFoT3o9eGS2dDUaEWA4TtaTQ";
+                    //"1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
+            String range = "manuim!A2:D";
             List<String> results = new ArrayList<String>();
             ValueRange response = this.mService.spreadsheets().values()
                     .get(spreadsheetId, range)
                     .execute();
             List<List<Object>> values = response.getValues();
             if (values != null) {
-                results.add("Name, Major");
+                results.add("email, car");
                 for (List row : values) {
-                    results.add(row.get(0) + ", " + row.get(4));
+                    if(row.size() == 0){
+                        continue;
+                    }
+                    results.add(row.get(0) + ", " + row.get(3));
                 }
             }
             return results;
@@ -346,6 +351,13 @@ public class MainActivity extends Activity
                 output.add(0, "Data retrieved using the Google Sheets API:");
                 mOutputText.setText(TextUtils.join("\n", output));
             }
+            Intent intent = new Intent(MainActivity.this, LookupActivity.class);
+            intent.putExtra(EXTRA_MESSAGE_CAR_PLATE_NUMBER, mCarPlateNumber);
+            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_NAME, "bat hen");
+            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_EMAIL, "anna.itin@gmail.com");
+            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_PHONE, "0545726619");
+
+            startActivity(intent);
         }
 
         @Override
@@ -372,12 +384,12 @@ public class MainActivity extends Activity
 
     public void lookup(View view){
 
-        Intent intent = new Intent(MainActivity.this, LookupActivity.class);
+
 
 
         //TODO: run ocr to get number
         EditText carPlateNumber = (EditText) findViewById(R.id.carPlateNumber);
-        String num = carPlateNumber.getText().toString();
+        mCarPlateNumber = carPlateNumber.getText().toString();
 
 
 
@@ -386,12 +398,7 @@ public class MainActivity extends Activity
         //readData("4060270");
         sampleFromGoogle();
 
-        intent.putExtra(EXTRA_MESSAGE_CAR_PLATE_NUMBER, num);
-        intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_NAME, "bat hen");
-        intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_EMAIL, "anna.itin@gmail.com");
-        intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_PHONE, "0545726619");
 
-        startActivity(intent);
     }
 
 
@@ -405,23 +412,6 @@ public class MainActivity extends Activity
             this.lastName = lastNAme;
             this.email = email;
         }
-    }
-
-    private UserData readData(String hashCarNumber){
-//        Firebase ref = new Firebase("https://lifted-61970.firebaseio.com");
-//        ref.authAnonymously(new Firebase.AuthResultHandler() {
-//            @Override
-//            public void onAuthenticated(AuthData authData) {
-//                // we've authenticated this session with your Firebase app
-//            }
-//            @Override
-//            public void onAuthenticationError(FirebaseError firebaseError) {
-//                // there was an error
-//            }
-//        });
-//        //FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //DatabaseReference myRef = database.getReference("12345");
-        return null;
     }
 
     private void sampleFromGoogle(){
