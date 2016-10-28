@@ -29,6 +29,7 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.sheets.v4.SheetsScopes;
 
 import com.google.api.services.sheets.v4.model.*;
+import com.google.common.collect.Lists;
 
 import android.Manifest;
 import android.accounts.AccountManager;
@@ -55,7 +56,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
@@ -279,7 +282,7 @@ public class MainActivity extends Activity
      * An asynchronous task that handles the Google Sheets API call.
      * Placing the API calls in their own task ensures the UI stays responsive.
      */
-    private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
+    private class MakeRequestTask extends AsyncTask<Void, Void, Map<String,List<String>>> {
         private com.google.api.services.sheets.v4.Sheets mService = null;
         private Exception mLastError = null;
 
@@ -297,7 +300,7 @@ public class MainActivity extends Activity
          * @param params no parameters needed for this task.
          */
         @Override
-        protected List<String> doInBackground(Void... params) {
+        protected Map<String,List<String>> doInBackground(Void... params) {
             try {
                 return getDataFromApi();
             } catch (Exception e) {
@@ -313,22 +316,25 @@ public class MainActivity extends Activity
          * @return List of names and majors
          * @throws IOException
          */
-        private List<String> getDataFromApi() throws IOException {
+        private Map<String, List<String>> getDataFromApi() throws IOException {
             String spreadsheetId ="1zmTCxJL8BiiuwNgmqzlRFoT3o9eGS2dDUaEWA4TtaTQ";
                     //"1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms";
-            String range = "manuim!A2:D";
-            List<String> results = new ArrayList<String>();
+            String range = "manuim!A2:H";
+            Map<String,List<String>> results = new HashMap<>();
             ValueRange response = this.mService.spreadsheets().values()
                     .get(spreadsheetId, range)
                     .execute();
             List<List<Object>> values = response.getValues();
             if (values != null) {
-                results.add("email, car");
+//                results.put("email, car");
                 for (List row : values) {
                     if(row.size() == 0){
                         continue;
                     }
-                    results.add(row.get(0) + ", " + row.get(3));
+                    if(row.size() < 8){
+                        continue;
+                    }
+                    results.put(row.get(3) + "", Lists.newArrayList(row.get(0) + "", row.get(1) + "" , row.get(2) + "", row.get(7) + ""));
                 }
             }
             return results;
@@ -343,19 +349,31 @@ public class MainActivity extends Activity
         }
 
         @Override
-        protected void onPostExecute(List<String> output) {
+        protected void onPostExecute(Map<String,List<String>> output) {
             mProgress.hide();
+            List<String> carHolderData;
             if (output == null || output.size() == 0) {
                 mOutputText.setText("No results returned.");
+                return;
             } else {
-                output.add(0, "Data retrieved using the Google Sheets API:");
-                mOutputText.setText(TextUtils.join("\n", output));
+//                output.add(0, "Data retrieved using the Google Sheets API:");
+                if(!output.containsKey(mCarPlateNumber)){
+                    mOutputText.setText("Didnt find the car number in the list! It is a stranger! " +
+                            "You can lift him! It will be his problem to look for you later! " +
+                            "But if you are the one that was lifted then you got a problem! Good luck!");
+                    return;
+                }
+                carHolderData = output.get(mCarPlateNumber);
+                carHolderData.add(0, "Data retrieved using the Google Sheets API:" + mCarPlateNumber);
+                mOutputText.setText(TextUtils.join("\n", carHolderData));
             }
+
+
             Intent intent = new Intent(MainActivity.this, LookupActivity.class);
             intent.putExtra(EXTRA_MESSAGE_CAR_PLATE_NUMBER, mCarPlateNumber);
-            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_NAME, "bat hen");
-            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_EMAIL, "anna.itin@gmail.com");
-            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_PHONE, "0545726619");
+            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_NAME, carHolderData.get(1) + " " + carHolderData.get(2));
+            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_EMAIL, carHolderData.get(3));
+            intent.putExtra(EXTRA_MESSAGE_CAR_DRIVER_PHONE, carHolderData.get(4));
 
             startActivity(intent);
         }

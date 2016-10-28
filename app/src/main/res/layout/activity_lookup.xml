@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:text="@string/sms_button_text"
         android:id="@+id/sms_button"
+        android:onClick="smsOnClick"
         android:layout_above="@+id/ignore_button"
         android:layout_centerHorizontal="true" />
 
@@ -40,6 +41,7 @@
         android:layout_height="wrap_content"
         android:text="@string/call_button_text"
         android:id="@+id/call_button"
+        android:onClick="callOnClick"
         android:layout_above="@+id/email_button"
         android:layout_centerHorizontal="true" />
 
