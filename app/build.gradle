@@ -20,7 +20,30 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:24.2.1'
+    compile files('libs/gdata-spreadsheet-3.0.jar')
+    compile files('libs/gdata-spreadsheet-meta-3.0.jar')
+    compile files('libs/gdata-core-1.0.jar')
+    compile files('libs/guava-13.0.1.jar')
+    compile files('libs/google-http-client-1.12.0-beta.jar')
+    //compile files('libs/google-api-client-android-1.12.0-beta.jar')
+    //compile 'com.google.firebase:firebase-core:9.4.0'
+    //compile 'com.google.firebase:firebase-database:9.4.0'
+    //compile 'com.google.firebase:firebase-auth:9.4.0'
+    //compile files('libs/firebase-client-android-2.5.2.jar')
+
+    compile 'com.google.android.gms:play-services-auth:9.0.2'
+    compile 'pub.devrel:easypermissions:0.1.5'
+    compile('com.google.api-client:google-api-client-android:1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+    compile('com.google.apis:google-api-services-sheets:v4-rev24-1.22.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+
 }
+
+apply plugin: 'com.google.gms.google-services'
+

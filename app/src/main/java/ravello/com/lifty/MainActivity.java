@@ -1,19 +1,9 @@
 package ravello.com.lifty;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-//
-//import com.firebase.client.AuthData;
-//import com.firebase.client.Firebase;
-//import com.firebase.client.FirebaseError;
-//import com.google.firebase.database.DatabaseReference;
-//import com.google.firebase.database.FirebaseDatabase;
-
-
-
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -29,7 +19,6 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.sheets.v4.SheetsScopes;
 
 import com.google.api.services.sheets.v4.model.*;
-import com.google.common.collect.Lists;
 
 import android.Manifest;
 import android.accounts.AccountManager;
@@ -37,25 +26,17 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.text.method.ScrollingMovementMethod;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

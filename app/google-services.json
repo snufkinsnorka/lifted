@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "147502631950",
+    "firebase_url": "https://lifted-61970.firebaseio.com",
+    "project_id": "lifted-61970",
+    "storage_bucket": "lifted-61970.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:147502631950:android:d6fc311854b44f2a",
+        "android_client_info": {
+          "package_name": "ravello.com.lifty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "147502631950-1c285ihbjf65s1fulrflkn5kiktudhq1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6AoH5kRksMyPDvbX5nEe2VjyX7MH4lpk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
